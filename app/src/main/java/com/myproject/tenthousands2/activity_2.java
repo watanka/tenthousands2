@@ -79,8 +79,6 @@ public class activity_2 extends AppCompatActivity {
 //                intent.putExtra("position", position);
                 setResult(RESULT_OK,intent);
                 finish();
-
-
             }
         });
 //

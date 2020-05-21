@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:textSize="30dp"/>
+        android:textSize="30sp"/>
 
 
     <EditText
@@ -18,14 +18,8 @@
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_above="@+id/text_view_countdown"
-        android:layout_below="@+id/activity_text"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginStart="146dp"
-        android:layout_marginLeft="146dp"
-        android:layout_marginTop="170dp"
-        android:layout_marginBottom="69dp"
-        android:hint="minutes"
+        android:layout_centerHorizontal="true"
+        android:hint="Minutes"
         android:inputType="number"
         android:maxLength="4" />
 
@@ -33,9 +27,10 @@
         android:id="@+id/button_set"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="set"
         android:layout_alignTop="@+id/edit_text_input"
-        android:layout_toRightOf="@+id/edit_text_input" />
+        android:layout_toRightOf="@+id/edit_text_input"
+        android:text="Set" />
+
 
     <TextView
         android:id="@+id/text_view_countdown"
@@ -46,6 +41,7 @@
         android:text="00:00"
         android:textColor="@android:color/black"
         android:textSize="60sp" />
+
     <Button
         android:id="@+id/button_start_pause"
         android:layout_width="wrap_content"
@@ -53,18 +49,18 @@
         android:layout_below="@+id/text_view_countdown"
         android:layout_centerHorizontal="true"
         android:text="start" />
+
     <Button
         android:id="@+id/button_reset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_view_countdown"
         android:layout_marginStart="11dp"
-        android:layout_toEndOf="@+id/button_start_pause"
+        android:layout_toRightOf="@+id/button_start_pause"
         android:text="reset"
         android:visibility="invisible"
         tools:visibility="visible"
-        android:layout_marginLeft="11dp"
-        android:layout_toRightOf="@+id/button_start_pause" />
+        android:layout_marginLeft="11dp" />
 
     <ImageButton
         android:id="@+id/smile_btn"

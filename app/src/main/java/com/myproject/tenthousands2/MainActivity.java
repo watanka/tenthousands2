@@ -82,20 +82,21 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.setOnItemClickListener(new Adapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Intent intent = new Intent(MainActivity.this, activity_2.class);
-                intent.putExtra("item", mList.get(position));
+                Intent intent1 = new Intent(MainActivity.this, activity_2.class);
+                intent1.putExtra("item", mList.get(position));
 //                intent.putExtra("position", position);
-                startActivityForResult(intent, 100);
+                startActivityForResult(intent1, 100);
             }
 
             public void timerClick(int position){
-                Intent intent = new Intent(MainActivity.this, timer.class);
+                Intent intent2 = new Intent(MainActivity.this, timer.class);
 //              parcelable 형태
 //                intent.putExtra("activity", mList.get(position));
-//                intent.putExtra("activity", mList.get(position).getText());
-//                intent.putExtra("time", mList.get(position).getTime());
-//                intent.putExtra("position", position);
-                startActivityForResult(intent, 1);
+                intent2.putExtra("activity", mList.get(position).getText());
+                intent2.putExtra("time", mList.get(position).getTime());
+                intent2.putExtra("position", position);
+                startActivityForResult(intent2, 10);
+
             }
 
         });
@@ -108,10 +109,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 1){
+        if (requestCode == 10){
             if (resultCode==RESULT_OK){
-                Toast.makeText(MainActivity.this, "success"+data.getIntExtra("quality",0)+", "+ data.getIntExtra("time",0) +" 시간 축적", Toast.LENGTH_SHORT).show();
-                updatePgbar_current(data.getIntExtra("position", 0), data.getIntExtra("time", 0));
+                Toast.makeText(MainActivity.this, "success"+data.getIntExtra("time",0)/1000+"second saved", Toast.LENGTH_SHORT).show();
+//                updatePgbar_current(data.getIntExtra("position", 0), data.getIntExtra("time", 0));
             } else{
                 Toast.makeText(MainActivity.this, "failed", Toast.LENGTH_SHORT).show();
             }
@@ -120,8 +121,8 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 100){
             if (resultCode==RESULT_OK){
                 // TODO: total_time을 progress bar max로 설정.
-
-                updatePgbar_total(data.getIntExtra("position",0),data.getIntExtra("total_time", 0));
+                Toast.makeText(MainActivity.this, "timer done", Toast.LENGTH_SHORT).show();
+//                updatePgbar_total(data.getIntExtra("position",0),data.getIntExtra("total_time", 0));
 
 //                Toast.makeText(MainActivity.this, ""+data.getIntExtra("total_time",0), Toast.LENGTH_SHORT).show();
             }

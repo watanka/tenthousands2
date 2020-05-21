@@ -12,13 +12,17 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import org.w3c.dom.Text;
+
 import java.util.Locale;
 
-public class timer extends Activity {
+public class timer extends AppCompatActivity {
 
     private EditText mEditTextInput;
     private TextView mTextViewCountDown;
-    private TextView activity_text;
     private Button mButtonSet;
     private Button mButtonStartPause;
     private Button mButtonReset;
@@ -28,26 +32,40 @@ public class timer extends Activity {
     private long mTimeLeftInMillis;
     private long mEndTime;
 
+    private TextView activity_text;
+
+
+    private int time;
+    private int position;
+
     private ImageButton mButtonSmile;
     private ImageButton mButtonUnsmile;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.timer);
+        setContentView(R.layout.timer_);
 
-//        Intent intent = getIntent();
-//        final int position = intent.getIntExtra("position", 0);
-
-        activity_text = findViewById(R.id.activity_name);
-//        activity_text.setText(intent.getStringExtra("activity"));
 
         mEditTextInput = findViewById(R.id.edit_text_input);
         mTextViewCountDown = findViewById(R.id.text_view_countdown);
         mButtonSet = findViewById(R.id.button_set);
         mButtonStartPause = findViewById(R.id.button_start_pause);
         mButtonReset = findViewById(R.id.button_reset);
+
+        mButtonSmile = findViewById(R.id.smile_btn);
+        mButtonUnsmile = findViewById(R.id.unsmile_btn);
+        activity_text = findViewById(R.id.activity_text);
+
+        Intent intent = getIntent();
+
+
+        time = intent.getIntExtra("time", 0);
+        position = intent.getIntExtra("position", 0);
+
+        activity_text.setText(intent.getStringExtra("activity"));
 
         mButtonSet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +108,7 @@ public class timer extends Activity {
                 Intent intent = new Intent();
                 intent.putExtra("time", (int) (mStartTimeInMillis - mTimeLeftInMillis));
                 intent.putExtra("quality", 1);
-//                intent.putExtra("position", position);
+                intent.putExtra("position", position);
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -100,18 +118,26 @@ public class timer extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-//                intent.putExtra("time", START_TIME_IN_MILLIS);
-//                intent.putExtra("quality", 0);
+                intent.putExtra("time", mStartTimeInMillis - mTimeLeftInMillis);
+                intent.putExtra("quality", 0);
                 setResult(RESULT_CANCELED, intent);
                 finish();
             }
         });
-
-
+//
+//
 
     }
 
-
+    private void setSmileVisible(){
+        if (mTimerRunning){
+            mButtonUnsmile.setVisibility(View.INVISIBLE);
+            mButtonSmile.setVisibility(View.INVISIBLE);
+        }else {
+            mButtonUnsmile.setVisibility(View.VISIBLE);
+            mButtonSmile.setVisibility(View.VISIBLE);
+        }
+    }
 
     private void setTime(long milliseconds) {
         mStartTimeInMillis = milliseconds;
@@ -129,15 +155,18 @@ public class timer extends Activity {
             @Override
             public void onFinish() {
                 mTimerRunning = false;
+
                 updateWatchInterface();
             }
         }.start();
         mTimerRunning = true;
+        setSmileVisible();
         updateWatchInterface();
     }
     private void pauseTimer() {
         mCountDownTimer.cancel();
         mTimerRunning = false;
+        setSmileVisible();
         updateWatchInterface();
     }
     private void resetTimer() {
@@ -225,3 +254,5 @@ public class timer extends Activity {
         }
     }
 }
+
+

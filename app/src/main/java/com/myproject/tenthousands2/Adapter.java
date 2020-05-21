@@ -102,7 +102,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.AdapterViewHolder> {
         holder.mTextView.setText(currentItem.getText());
 //        holder.mPgbar.setMax(currentItem.getTotal_time());
         // TODO: bug fix
-        holder.mPgbar.setProgress(currentItem.getTime());
+//        holder.mPgbar.setProgress(currentItem.getTime());
 
     }
 
