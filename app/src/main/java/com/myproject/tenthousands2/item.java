@@ -5,11 +5,11 @@ import android.os.Parcelable;
 
 public class item implements Parcelable {
 
-    private int time;
+    private long time;
     private String text;
-    private int total_time;
+    private long total_time;
 
-    public item(int time, String text, int total_time) {
+    public item(long time, String text, long total_time) {
         this.time = time;
         this.text = text;
         this.total_time = total_time;
@@ -20,9 +20,9 @@ public class item implements Parcelable {
 
 
     protected item(Parcel in) {
-        time = in.readInt();
+        time = in.readLong();
         text = in.readString();
-        total_time = in.readInt();
+        total_time = in.readLong();
     }
 
     public static final Creator<item> CREATOR = new Creator<item>() {
@@ -37,19 +37,19 @@ public class item implements Parcelable {
         }
     };
 
-    public int getTotal_time() {
+    public long getTotal_time() {
         return total_time;
     }
 
-    public void setTotal_time(int total_time) {
+    public void setTotal_time(long total_time) {
         this.total_time = total_time;
     }
 
-    public int getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(long time) {
         this.time = time;
     }
 
@@ -68,7 +68,8 @@ public class item implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(time);
+        dest.writeLong(time);
         dest.writeString(text);
+        dest.writeLong(total_time);
     }
 }

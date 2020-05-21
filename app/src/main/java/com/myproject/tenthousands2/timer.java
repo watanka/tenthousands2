@@ -31,11 +31,11 @@ public class timer extends AppCompatActivity {
     private long mStartTimeInMillis;
     private long mTimeLeftInMillis;
     private long mEndTime;
-
+    private long mTimeDone;
     private TextView activity_text;
 
 
-    private int time;
+
     private int position;
 
     private ImageButton mButtonSmile;
@@ -62,7 +62,7 @@ public class timer extends AppCompatActivity {
         Intent intent = getIntent();
 
 
-        time = intent.getIntExtra("time", 0);
+
         position = intent.getIntExtra("position", 0);
 
         activity_text.setText(intent.getStringExtra("activity"));
@@ -91,6 +91,7 @@ public class timer extends AppCompatActivity {
                     pauseTimer();
                 } else {
                     startTimer();
+                    mTimeDone = mStartTimeInMillis - mTimeLeftInMillis;
                 }
             }
         });
@@ -106,7 +107,7 @@ public class timer extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.putExtra("time", (int) (mStartTimeInMillis - mTimeLeftInMillis));
+                intent.putExtra("time", mTimeDone);
                 intent.putExtra("quality", 1);
                 intent.putExtra("position", position);
                 setResult(RESULT_OK, intent);
@@ -118,7 +119,7 @@ public class timer extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.putExtra("time", mStartTimeInMillis - mTimeLeftInMillis);
+                intent.putExtra("time", mTimeDone);
                 intent.putExtra("quality", 0);
                 setResult(RESULT_CANCELED, intent);
                 finish();
@@ -150,12 +151,13 @@ public class timer extends AppCompatActivity {
             @Override
             public void onTick(long millisUntilFinished) {
                 mTimeLeftInMillis = millisUntilFinished;
+
                 updateCountDownText();
             }
             @Override
             public void onFinish() {
                 mTimerRunning = false;
-
+                setSmileVisible();
                 updateWatchInterface();
             }
         }.start();

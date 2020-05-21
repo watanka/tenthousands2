@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         createList();
         buildRecyclerView();
 
+
         click_btn = findViewById(R.id.button_insert);
         click_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,28 +45,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void insertItem(int position){
-        mList.add(position, new item(30, "temp", 100));
-        mAdapter.notifyItemChanged(position);
+        mList.add(position, new item(999999, "temp", 1000000));
+        mAdapter.notifyItemInserted(position);
     }
     public void removeItem(int position){
         mList.remove(position);
         mAdapter.notifyItemRemoved(position);
     }
 
-    public void updatePgbar_total(int position, int total_time){
+    public void updatePgbar_total(int position, long total_time){
         mList.get(position).setTotal_time(total_time);
         mAdapter.notifyItemChanged(position);
     }
 
-    public void updatePgbar_current(int position, int timer_time){
-        mList.get(position).setTime(timer_time);
+    public void updatePgbar_current(int position, long timer_time){
+
+        mList.get(position).setTime(timer_time+ mList.get(position).getTime());
         mAdapter.notifyItemChanged(position);
+
+        if (mList.get(position).getTime() >= mList.get(position).getTotal_time()){
+            removeItem(position);
+        }
+
     }
+
+//    public void updatePgnum_total(int position, double total_time){
+//
+//    }
+//
+//    public void updatePgnum_current(int position, double timer_time){
+//        mList.get(position).setTimer
+//
+//    }
+
 
     private void createList() {
         mList = new ArrayList<>();
-        mList.add(new item( 60, "Piano", 100));
-        mList.add(new item(40, "swimming", 10));
+        mList.add(new item( 60*1000*60*60, "Piano", 100*1000*60*60));
+        mList.add(new item(40*1000*60*60, "swimming", 100*1000*60*60));
 
     }
 
@@ -93,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
 //              parcelable 형태
 //                intent.putExtra("activity", mList.get(position));
                 intent2.putExtra("activity", mList.get(position).getText());
-                intent2.putExtra("time", mList.get(position).getTime());
                 intent2.putExtra("position", position);
                 startActivityForResult(intent2, 10);
 
@@ -111,8 +127,22 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == 10){
             if (resultCode==RESULT_OK){
-                Toast.makeText(MainActivity.this, "success"+data.getIntExtra("time",0)/1000+"second saved", Toast.LENGTH_SHORT).show();
-//                updatePgbar_current(data.getIntExtra("position", 0), data.getIntExtra("time", 0));
+                int time = (int) (data.getLongExtra("time", 0) / 1000);
+
+                int hr = (int) Math.round(time / 3600);
+                int min = (int) Math.round((time % 3600) / 60) ;
+                int sec = (int) Math.round((time % 60));
+                //TODO: 시/분/초 단위로 토스트 메세지 나오도록.
+//                if (min == 0) {
+//                    Toast.makeText(MainActivity.this, String.format("% 초", sec), Toast.LENGTH_SHORT).show();
+//                } else if (hr == 0){
+//                    Toast.makeText(MainActivity.this, String.format("%d 분 % 초", min, sec), Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(MainActivity.this, String.format("%d 시 %d 분 % 초", hr, min, sec), Toast.LENGTH_SHORT).show();
+//                }
+
+
+                updatePgbar_current(data.getIntExtra("position", 0), data.getLongExtra("time", 0));
             } else{
                 Toast.makeText(MainActivity.this, "failed", Toast.LENGTH_SHORT).show();
             }
@@ -120,9 +150,9 @@ public class MainActivity extends AppCompatActivity {
         /**설정메뉴**/
         if (requestCode == 100){
             if (resultCode==RESULT_OK){
-                // TODO: total_time을 progress bar max로 설정.
+
                 Toast.makeText(MainActivity.this, "timer done", Toast.LENGTH_SHORT).show();
-//                updatePgbar_total(data.getIntExtra("position",0),data.getIntExtra("total_time", 0));
+                updatePgbar_total(data.getIntExtra("position",0),data.getLongExtra("total_time", 0));
 
 //                Toast.makeText(MainActivity.this, ""+data.getIntExtra("total_time",0), Toast.LENGTH_SHORT).show();
             }

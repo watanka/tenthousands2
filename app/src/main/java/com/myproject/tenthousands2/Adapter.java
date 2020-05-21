@@ -42,13 +42,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.AdapterViewHolder> {
         public TextView mTextView;
         public ProgressBar mPgbar;
         public ImageView timer_img;
+        public TextView pgnum;
 
         public AdapterViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
 
             mTextView = itemView.findViewById(R.id.textView);
             mPgbar = itemView.findViewById(R.id.progressbar);
-//            mPgbar.setMax(600);
+            pgnum = itemView.findViewById(R.id.pg_num);
+
 
             timer_img = itemView.findViewById(R.id.click_btn_img);
 
@@ -100,9 +102,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.AdapterViewHolder> {
         item currentItem = mItemList.get(position);
 
         holder.mTextView.setText(currentItem.getText());
-//        holder.mPgbar.setMax(currentItem.getTotal_time());
+        holder.mPgbar.setMax((int) Math.round(currentItem.getTotal_time()));
+        holder.mPgbar.setProgress((int) Math.round(currentItem.getTime()));
+        holder.pgnum.setText(String.format("%.2f", (double)currentItem.getTime()/currentItem.getTotal_time()*100) +"%"); //currentItem.getTime()/currentItem.getTotal_time()
+
         // TODO: bug fix
-//        holder.mPgbar.setProgress(currentItem.getTime());
+
 
     }
 
