@@ -4,13 +4,17 @@
     android:layout_height="100dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="10dp"
-    android:background="@color/cardview_dark_background"
+    app:cardBackgroundColor="@color/light_purple"
+    android:layout_marginBottom="4dp"
     >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        android:background="@color/light_purple">
+<!--        android:padding="10dp"-->
+        >
 
 <!--        <ImageView-->
 <!--            android:id="@+id/imageView"-->
@@ -27,10 +31,20 @@
             android:textStyle="bold"
             android:textColor="@android:color/black"
             android:layout_alignParentTop="true"
-
-
             />
+
+        <TextView
+            android:id="@+id/sub_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textView"
+            android:layout_marginLeft="23dp"
+            android:textSize="13sp"
+            android:layout_toRightOf="@+id/textView"
+            android:text="지금 시작해보세요." />
+
         <ImageView
+            android:id="@+id/setting_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/textView"
@@ -62,10 +76,11 @@
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:layout_width="323dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="6"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:progress="5" />
+                android:layout_weight="5.5"
+                android:paddingTop="5dp"
+                android:progress="5"/>
+<!--                android:progressDrawable="@drawable/pb_drawable_1"-->
+                />
 
             <TextView
                 android:id="@+id/pg_num"
@@ -73,12 +88,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"
                 android:layout_marginTop="3dp"
-                android:layout_weight="3"
+                android:layout_weight="3.5"
                 android:gravity="center"
                 android:text="5/10" />
 
 
         </LinearLayout>
     </RelativeLayout>
+
 
 </androidx.cardview.widget.CardView>

@@ -1,46 +1,30 @@
 package com.myproject.tenthousands2;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.NumberPicker;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.w3c.dom.Text;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.NumberPicker;
 
-public class activity_2 extends AppCompatActivity {
+public class set_time extends AppCompatActivity {
 
-    private Button tt_set_btn;
+    private Button set_btn;
     private NumberPicker np1, np2, np3;
-    private int position;
     private long value;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity2);
+        setContentView(R.layout.activity_set_time);
 
-
-        tt_set_btn = findViewById(R.id.tt_set_btn);
-
-        Intent intent_r = getIntent();
-        position = intent_r.getIntExtra("position", 0);
-
-        np1 = findViewById(R.id.tt_numberPicker1);
-        np2 = findViewById(R.id.tt_numberPicker2);
-        np3 = findViewById(R.id.tt_numberPicker3);
+        set_btn = findViewById(R.id.set_btn);
+        np1 = findViewById(R.id.numberPicker1);
+        np2 = findViewById(R.id.numberPicker2);
+        np3 = findViewById(R.id.numberPicker3);
 
         np1.setMinValue(0);
         np1.setMaxValue(12);
@@ -49,6 +33,9 @@ public class activity_2 extends AppCompatActivity {
         np3.setMinValue(0);
         np3.setMaxValue(59);
 
+//        np1.setOnValueChangedListener(this);
+//        np2.setOnValueChangedListener(this);
+//        np3.setOnValueChangedListener(this);
 
         np1.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
@@ -71,14 +58,14 @@ public class activity_2 extends AppCompatActivity {
             }
         });
 
-        tt_set_btn.setOnClickListener(new View.OnClickListener() {
+        set_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent intent = new Intent();
 
-                intent.putExtra("position",position);
-                intent.putExtra("total_time", value);
+
+                intent.putExtra("time", value);
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -87,3 +74,6 @@ public class activity_2 extends AppCompatActivity {
     }
 
 }
+
+
+

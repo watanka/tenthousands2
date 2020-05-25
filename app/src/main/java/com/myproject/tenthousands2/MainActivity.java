@@ -13,8 +13,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -39,13 +40,16 @@ public class MainActivity extends AppCompatActivity {
         click_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                insertItem(mList.size());
+                Intent intent = new Intent(MainActivity.this, add_activity.class);
+                startActivityForResult(intent, 30);
+
+
             }
         });
     }
 
-    public void insertItem(int position){
-        mList.add(position, new item(999999, "temp", 1000000));
+    public void insertItem(int position, String text, long total_time){
+        mList.add(position, new item(0, text, total_time));
         mAdapter.notifyItemInserted(position);
     }
     public void removeItem(int position){
@@ -64,24 +68,17 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.notifyItemChanged(position);
 
         if (mList.get(position).getTime() >= mList.get(position).getTotal_time()){
+            Toast.makeText(MainActivity.this, mList.get(position).getText()+" 를(을) "+mList.get(position).getTotal_time()+"시간 달성하셨습니다!! 축하합니다.", Toast.LENGTH_LONG).show();
             removeItem(position);
+
         }
 
     }
 
-//    public void updatePgnum_total(int position, double total_time){
-//
-//    }
-//
-//    public void updatePgnum_current(int position, double timer_time){
-//        mList.get(position).setTimer
-//
-//    }
-
 
     private void createList() {
         mList = new ArrayList<>();
-        mList.add(new item( 60*1000*60*60, "Piano", 100*1000*60*60));
+        mList.add(new item( 60*1000*60*60+1000*37*60+1000*24, "Piano", 100*1000*60*60));
         mList.add(new item(40*1000*60*60, "swimming", 100*1000*60*60));
 
     }
@@ -99,11 +96,19 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.setOnItemClickListener(new Adapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Intent intent1 = new Intent(MainActivity.this, activity_2.class);
-                intent1.putExtra("item", mList.get(position));
+                Intent intent1 = new Intent(MainActivity.this, album.class);
 //                intent.putExtra("position", position);
+//                startActivityForResult(intent1, 100);
+                startActivity(intent1);
+            }
+
+            public void settingClick(int position){
+                Intent intent1 = new Intent(MainActivity.this, activity_2.class);
+//                intent1.putExtra("item", mList.get(position));
+                intent1.putExtra("position", position);
                 startActivityForResult(intent1, 100);
             }
+
 
             public void timerClick(int position){
                 Intent intent2 = new Intent(MainActivity.this, timer.class);
@@ -126,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 10){
+            // timer 버튼
             if (resultCode==RESULT_OK){
                 int time = (int) (data.getLongExtra("time", 0) / 1000);
 
@@ -141,6 +147,11 @@ public class MainActivity extends AppCompatActivity {
 //                    Toast.makeText(MainActivity.this, String.format("%d 시 %d 분 % 초", hr, min, sec), Toast.LENGTH_SHORT).show();
 //                }
 
+                Date mDate = new Date(System.currentTimeMillis());
+                SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                String getTime = simpleDate.format(mDate);
+
+                Toast.makeText(MainActivity.this, ""+getTime, Toast.LENGTH_SHORT).show();
 
                 updatePgbar_current(data.getIntExtra("position", 0), data.getLongExtra("time", 0));
             } else{
@@ -149,12 +160,25 @@ public class MainActivity extends AppCompatActivity {
         }
         /**설정메뉴**/
         if (requestCode == 100){
+            // 설정 버튼
             if (resultCode==RESULT_OK){
 
                 Toast.makeText(MainActivity.this, "timer done", Toast.LENGTH_SHORT).show();
                 updatePgbar_total(data.getIntExtra("position",0),data.getLongExtra("total_time", 0));
 
-//                Toast.makeText(MainActivity.this, ""+data.getIntExtra("total_time",0), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, ""+data.getIntExtra("total_time",0), Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if (requestCode == 30){
+            // 새로운 항목 추가
+            if (resultCode==RESULT_OK){
+
+
+
+                insertItem(mList.size(),data.getStringExtra("activity_name"),data.getLongExtra("activity_total_time",0));
+                Toast.makeText(MainActivity.this, data.getStringExtra("activity_name")+"추가됨.", Toast.LENGTH_SHORT).show();
+
             }
         }
 

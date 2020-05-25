@@ -3,8 +3,11 @@ package com.myproject.tenthousands2;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.CountDownTimer;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -13,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.w3c.dom.Text;
@@ -21,27 +25,23 @@ import java.util.Locale;
 
 public class timer extends AppCompatActivity {
 
-    private EditText mEditTextInput;
-    private TextView mTextViewCountDown;
-    private Button mButtonSet;
-    private Button mButtonStartPause;
-    private Button mButtonReset;
+//    private EditText mEditTextInput;
+    private TextView mTextViewCountDown, activity_text;
+    private Button mButtonSet, mButtonStartPause, mButtonReset;
+
     private CountDownTimer mCountDownTimer;
     private boolean mTimerRunning;
-    private long mStartTimeInMillis;
-    private long mTimeLeftInMillis;
-    private long mEndTime;
-    private long mTimeDone;
-    private TextView activity_text;
+    private long mStartTimeInMillis,mTimeLeftInMillis, mEndTime, mTimeDone, input;
 
 
+    private static final int CAMERA_REQUEST_CODE = 45;
 
     private int position;
 
-    private ImageButton mButtonSmile;
-    private ImageButton mButtonUnsmile;
+    private ImageButton mButtonSmile, mButtonUnsmile, mButtonCamera;
 
 
+    private String ex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class timer extends AppCompatActivity {
         setContentView(R.layout.timer_);
 
 
-        mEditTextInput = findViewById(R.id.edit_text_input);
+//        mEditTextInput = findViewById(R.id.edit_text_input);
         mTextViewCountDown = findViewById(R.id.text_view_countdown);
         mButtonSet = findViewById(R.id.button_set);
         mButtonStartPause = findViewById(R.id.button_start_pause);
@@ -57,7 +57,10 @@ public class timer extends AppCompatActivity {
 
         mButtonSmile = findViewById(R.id.smile_btn);
         mButtonUnsmile = findViewById(R.id.unsmile_btn);
+        mButtonCamera = findViewById(R.id.camera_btn);
+
         activity_text = findViewById(R.id.activity_text);
+
 
         Intent intent = getIntent();
 
@@ -67,21 +70,33 @@ public class timer extends AppCompatActivity {
 
         activity_text.setText(intent.getStringExtra("activity"));
 
+        mButtonCamera.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+            //TODO: add camera intent
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+            }
+        });
+
         mButtonSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String input = mEditTextInput.getText().toString();
-                if (input.length() == 0) {
-                    Toast.makeText(timer.this, "Field can't be empty", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                long millisInput = Long.parseLong(input) * 60000;
-                if (millisInput == 0) {
-                    Toast.makeText(timer.this, "Please enter a positive number", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                setTime(millisInput);
-                mEditTextInput.setText("");
+                Intent intent = new Intent(timer.this, set_time.class);
+                startActivityForResult(intent, 80);
+
+//                String input = mEditTextInput.getText().toString();
+//                if (input.length() == 0) {
+//                    Toast.makeText(timer.this, "Field can't be empty", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                long millisInput = Long.parseLong(input) * 60000;
+//                if (millisInput == 0) {
+//                    Toast.makeText(timer.this, "Please enter a positive number", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                setTime(millisInput);
+//                mEditTextInput.setText("");
             }
         });
         mButtonStartPause.setOnClickListener(new View.OnClickListener() {
@@ -134,9 +149,12 @@ public class timer extends AppCompatActivity {
         if (mTimerRunning){
             mButtonUnsmile.setVisibility(View.INVISIBLE);
             mButtonSmile.setVisibility(View.INVISIBLE);
+            mButtonCamera.setVisibility(View.INVISIBLE);
+
         }else {
             mButtonUnsmile.setVisibility(View.VISIBLE);
             mButtonSmile.setVisibility(View.VISIBLE);
+            mButtonCamera.setVisibility(View.VISIBLE);
         }
     }
 
@@ -170,6 +188,9 @@ public class timer extends AppCompatActivity {
         mTimerRunning = false;
         setSmileVisible();
         updateWatchInterface();
+
+
+
     }
     private void resetTimer() {
         mTimeLeftInMillis = mStartTimeInMillis;
@@ -192,12 +213,12 @@ public class timer extends AppCompatActivity {
     }
     private void updateWatchInterface() {
         if (mTimerRunning) {
-            mEditTextInput.setVisibility(View.INVISIBLE);
+//            mEditTextInput.setVisibility(View.INVISIBLE);
             mButtonSet.setVisibility(View.INVISIBLE);
             mButtonReset.setVisibility(View.INVISIBLE);
             mButtonStartPause.setText("Pause");
         } else {
-            mEditTextInput.setVisibility(View.VISIBLE);
+//            mEditTextInput.setVisibility(View.VISIBLE);
             mButtonSet.setVisibility(View.VISIBLE);
             mButtonStartPause.setText("Start");
             if (mTimeLeftInMillis < 1000) {
@@ -255,6 +276,47 @@ public class timer extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //TODO: receive set_time
+        if (requestCode == 80){
+            if (resultCode == RESULT_OK){
+                input = data.getLongExtra("time", 0);
+
+//                if (input == 0) {
+//                    Toast.makeText(timer.this, "Field can't be empty", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+
+                if (input == 0) {
+                    Toast.makeText(timer.this, "Please enter a positive number", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
+                setTime(input);
+                Toast.makeText(this, ""+input, Toast.LENGTH_LONG).show();
+
+            }else {
+
+                Log.i("setTimer","set timer return sth else!!" );
+                return;
+            }
+
+            }
+        if (requestCode == CAMERA_REQUEST_CODE){
+            //CAMERA
+            Bitmap bitmap = (Bitmap)data.getExtras().get("image");
+            Intent intent = new Intent(this, album.class);
+            intent.putExtra("image", 1);
+
+        }
+        }
+
+
 }
+
 
 

@@ -13,22 +13,12 @@
         android:textSize="30sp"/>
 
 
-    <EditText
-        android:id="@+id/edit_text_input"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/text_view_countdown"
-        android:layout_centerHorizontal="true"
-        android:hint="Minutes"
-        android:inputType="number"
-        android:maxLength="4" />
-
     <Button
         android:id="@+id/button_set"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/edit_text_input"
-        android:layout_toRightOf="@+id/edit_text_input"
+
+
         android:text="Set" />
 
 
@@ -61,6 +51,24 @@
         android:visibility="invisible"
         tools:visibility="visible"
         android:layout_marginLeft="11dp" />
+
+    <ImageButton
+        android:id="@+id/camera_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_start_pause"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="175dp"
+        android:layout_marginLeft="175dp"
+        android:layout_marginTop="89dp"
+        android:layout_marginEnd="189dp"
+        android:layout_marginRight="189dp"
+        android:src="@drawable/ic_camera"
+        android:visibility="invisible"
+        tools:visibility="visible" />
 
     <ImageButton
         android:id="@+id/smile_btn"

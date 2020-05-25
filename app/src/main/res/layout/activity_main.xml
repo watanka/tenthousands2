@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+
+    >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -12,8 +14,7 @@
         android:layout_height="match_parent"
         android:padding="4dp"
         android:scrollbars="vertical"
-        android:background="@android:color/darker_gray"
-        android:layout_marginBottom="100dp"
+        android:background="@color/purple"
         />
 
     <Button
@@ -22,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="0dp"
+        android:layout_marginBottom="3dp"
         android:text="+"
         android:textSize="30dp"
         android:shadowRadius="@android:integer/config_mediumAnimTime"
